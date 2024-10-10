@@ -3,7 +3,7 @@ version: "3.9"
 services:
 
   grafana:
-    image: grafana/grafana:10.1.5-ubuntu
+    image: grafana/grafana:11.2.2
     ports:
       - "3000:3000"
     volumes:
@@ -12,14 +12,14 @@ services:
       - ./configs/grafana/dashboards:/etc/grafana/provisioning/dashboards/
 
   prometheus:
-    image: prom/prometheus:v2.47.2
+    image: prom/prometheus:v2.49.0
     ports:
-      - "9090:9090"    
-    command: 
+      - "9090:9090"
+    command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus" 
+      - "--storage.tsdb.path=/prometheus"
       - "--web.external-url=http://127.0.0.1:9090"
-      - "--web.console.libraries=/usr/share/prometheus/console_libraries" 
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
       - "--web.console.templates=/usr/share/prometheus/consoles"
     volumes:
       - prom-data:/prometheus
@@ -27,13 +27,13 @@ services:
       - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   alertmanager:
-    image: prom/alertmanager:v0.25.0
+    image: prom/alertmanager:v0.26.0
     ports:
       - "9093:9093"
-    command: 
+    command:
       - "--config.file=/etc/alertmanager/alertmanager.yml"
-      - "--storage.path=/alertmanager" 
-      - "--web.external-url=http://127.0.0.1:9093"      
+      - "--storage.path=/alertmanager"
+      - "--web.external-url=http://127.0.0.1:9093"
     volumes:
       - alert-data:/alertmanager
       - ./configs/alertmanager.yml:/etc/alertmanager/alertmanager.yml
@@ -53,14 +53,14 @@ services:
       - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
     ports:
-    - 8081:8080
+      - "8081:8080"
     volumes:
-    - /:/rootfs:ro
-    - /var/run:/var/run:rw
-    - /sys:/sys:ro
-    - /var/lib/docker/:/var/lib/docker:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
 
 volumes:
   grafana-data:
